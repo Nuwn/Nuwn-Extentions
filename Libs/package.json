@@ -1,0 +1,17 @@
+{
+  "name": "com.nuwn.extentions",
+  "version": "1.0.0",
+  "displayName": "Nuwn's Extentions",
+  "description": "This is Extentions used by Nuwn in his projects",
+  "unity": "2019.2",
+  "unityRelease": "0b5",
+  "dependencies": {
+ },
+ "keywords": [
+  ],
+  "author": {
+    "name": "Nuwn",
+    "email": "Nuwn@nuwn.net",
+    "url": "https://www.nuwn.net"
+  } 
+}
