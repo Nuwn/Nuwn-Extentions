@@ -39,6 +39,10 @@ namespace Nuwn
             {
                 Nuwn_Essentials.LoadNewScene(i, SceneManager.GetActiveScene().buildIndex);
             }
+            public void DelayedLoadScene(int Scene, float Delay)
+            {
+                this.SetTimeout(() => LoadScene(Scene), Delay * 1000);
+            }
         }
     }
 }
