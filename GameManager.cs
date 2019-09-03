@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using Nuwn.Essentials;
+using Nuwn.Extensions;
 
 namespace Nuwn
 {
