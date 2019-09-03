@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using Nuwn.Essentials;
 
 namespace Nuwn
 {
@@ -37,6 +33,10 @@ namespace Nuwn
             public void RestartGame()
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            public void LoadScene(int i)
+            {
+                Nuwn_Essentials.LoadNewScene(i, SceneManager.GetActiveScene().buildIndex);
             }
         }
     }
