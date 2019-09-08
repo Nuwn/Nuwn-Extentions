@@ -152,13 +152,13 @@ namespace Nuwn
             /// <returns></returns>
             public static Coroutine SetInterval(this MonoBehaviour instance, Action<object> Callback, float intervalTime) => instance.StartCoroutine(RepeatingWait((res) => Callback?.Invoke(true), intervalTime));
             public static Coroutine SetInterval(this MonoBehaviour instance, Action Callback, float intervalTime) => instance.StartCoroutine(RepeatingWait((res) => Callback?.Invoke(), intervalTime));
+            public static Coroutine SetInterval(this MonoBehaviour instance, Action Callback, float intervalTime, bool condition) => instance.StartCoroutine(RepeatingWaitConditioned((res) => Callback?.Invoke(), intervalTime, condition));
             /// <summary>
             /// 
             /// </summary>
             /// <param name="instance"></param>
             /// <param name="coroutine">The interval to stop, store it as a var</param>
             public static void StopInterval(this MonoBehaviour instance, Coroutine coroutine) => instance.StopCoroutine(coroutine);
-
 
 
             #region Internal functions
@@ -170,6 +170,14 @@ namespace Nuwn
             static IEnumerator RepeatingWait(Action<bool> Callback, float waitTime)
             {
                 while (true)
+                {
+                    yield return new WaitForSeconds(waitTime / 1000);
+                    Callback.Invoke(true);
+                }
+            }
+            static IEnumerator RepeatingWaitConditioned(Action<bool> Callback, float waitTime, bool condition)
+            {
+                while (condition)
                 {
                     yield return new WaitForSeconds(waitTime / 1000);
                     Callback.Invoke(true);
@@ -271,6 +279,26 @@ namespace Nuwn
             {
                 instance.StartCoroutine(Essentials.Nuwn_Essentials.LerpFloat((f) => { a.volume = f; }, from, 0, time, (v) => { callback?.Invoke(); } ));
             }
+        }
+
+        public static class ArrayExtensions
+        {
+            public static T[] Add<T>(this T[] array, T item)
+            {
+                T[] returnarray = new T[array.Length + 1];
+                for (int i = 0; i < array.Length; i++)
+                {
+                    returnarray[i] = array[i];
+                }
+                returnarray[array.Length] = item;
+                return returnarray;
+            }
+            public static T[] Remove<T>(this T[] array, T item)
+            {
+                int index = Array.IndexOf(array, item);
+                return array.Where((val, idx) => idx != index).ToArray();
+            }
+
         }
     }
 }
