@@ -195,14 +195,7 @@ namespace Nuwn
             public float maxValue;
         }
         public static class Nuwn_Statics
-        {
-            public static bool HasMethod(this object objectToCheck, string methodName)
-            {
-                var type = objectToCheck.GetType();
-                return type.GetMethod(methodName) != null;
-            }
-
-        }
+        {}
 
         [Serializable] public class UnityEventGameObject : UnityEvent<GameObject> { }
         [Serializable] public class UnityEventCollider2D : UnityEvent<Collider2D> { }
