@@ -7,9 +7,8 @@ using Nuwn.Extensions;
 
 namespace Nuwn
 {
-    public abstract class GameManager : MonoBehaviour
-    {
-        
+    public abstract class GameManager : Singleton<MonoBehaviour>
+    {   
         private void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -42,8 +41,7 @@ namespace Nuwn
         public void Resume()
         {
             PauseGame(false);
-        }
-        
+        }  
         public void RestartGame()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -53,56 +51,31 @@ namespace Nuwn
             Nuwn_Essentials.LoadNewScene(i, SceneManager.GetActiveScene().buildIndex);
         }
 
-
+        private void OnApplicationPause(bool pause)
+        {
+            PauseGame(pause);
+        }
 
 
         #region Pausable
-        static PausableMonoBehaviour[] Pausables = new PausableMonoBehaviour[0];
-        static PausableScriptableObject[] PausableScriptableObjects = new PausableScriptableObject[0];
+        static IPausable[] Pausables = new IPausable[0];
 
-        public static void RegisterPausable(object pausable)
+        public static void RegisterPausable(IPausable pausable)
         {
-            switch (pausable)
-            {
-                case PausableMonoBehaviour pm:
-                    Pausables = Pausables.Add(pm);
-                    break;
-                case PausableScriptableObject ps:
-                    PausableScriptableObjects = PausableScriptableObjects.Add(ps);
-                    break;
-            }
+            Pausables = Pausables.Add(pausable);
         }
-        public static void UnRegisterPausable(object pausable)
+        public static void UnRegisterPausable(IPausable pausable)
         {
-            switch (pausable)
-            {
-                case PausableMonoBehaviour pm:
-                    Pausables = Pausables.Remove(pm);
-                    break;
-                case PausableScriptableObject ps:
-                    PausableScriptableObjects = PausableScriptableObjects.Remove(ps);
-                    break;
-            }
+            Pausables = Pausables.Remove(pausable);
         }
 
         private void SetPause(bool v)
         {
-            for (int i = 0; i < PausableScriptableObjects.Length; i++)
-            {
-                if (PausableScriptableObjects[i].HasMethod("OnPause"))
-                {
-                    PausableScriptableObjects[i].OnPause(v);
-                }
-            }
             for (int i = 0; i < Pausables.Length; i++)
             {
-                if (Pausables[i].HasMethod("OnPause"))
-                {
-                    Pausables[i].OnPause(v);
-                }
+                Pausables[i].OnPause(v);
             }       
         }
-
         #endregion
     }
 }
