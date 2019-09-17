@@ -46,11 +46,27 @@ namespace Nuwn
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="oldScene">-1 if you want to unload manually</param>
         public void LoadScene(int i)
         {
-            Nuwn_Essentials.LoadNewScene(i, SceneManager.GetActiveScene().buildIndex);
+            Nuwn_Essentials.LoadNewScene(i, -1);
         }
-
+        public void LoadScene(int i, int oldScene)
+        {
+            Nuwn_Essentials.LoadNewScene(i, oldScene);
+        }
+        public void LoadScene(int i, Action Callback)
+        {
+            Nuwn_Essentials.LoadNewScene(i, -1, (v) => { if (v) Callback(); });
+        }
+        public void UnloadScene(int scene)
+        {
+            SceneManager.UnloadSceneAsync(scene);
+        }
         private void OnApplicationPause(bool pause)
         {
             PauseGame(pause);

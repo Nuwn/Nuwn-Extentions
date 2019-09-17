@@ -20,7 +20,7 @@ namespace Nuwn
             /// <param name="newScene"></param>
             /// <param name="oldScene"> ignore this to disable unload</param>
             /// <returns></returns>
-            public static IEnumerator LoadNewScene(int newScene, int oldScene = -1)
+            public static IEnumerator LoadNewScene(int newScene,  int oldScene = -1, Action<bool> Callback = null)
             {
                 AsyncOperation async = SceneManager.LoadSceneAsync(newScene);
 
@@ -33,6 +33,10 @@ namespace Nuwn
                 {
                     SceneManager.UnloadSceneAsync(oldScene);
                 }
+                else
+                {
+                    if (async.isDone && Callback != null) Callback(true);
+                } 
             }
 
 
@@ -196,7 +200,6 @@ namespace Nuwn
         }
         public static class Nuwn_Statics
         {}
-
         [Serializable] public class UnityEventGameObject : UnityEvent<GameObject> { }
         [Serializable] public class UnityEventCollider2D : UnityEvent<Collider2D> { }
         [Serializable] public class UnityEventCollider : UnityEvent<Collider> { }

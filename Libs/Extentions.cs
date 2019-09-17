@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text.RegularExpressions;
+using UnityEngine.UI;
 
 namespace Nuwn
 {
@@ -271,16 +272,23 @@ namespace Nuwn
         }
         public static class AudioExtentions
         {
-            public static void FadeIn (this AudioSource a, MonoBehaviour instance, float to, float time, Action callback = null)
+            public static void Fade (this AudioSource a, MonoBehaviour instance, float from, float to, float time, Action callback = null)
             {
-                instance.StartCoroutine(Essentials.Nuwn_Essentials.LerpFloat((f) => { a.volume = f; }, 0, to, time, (v) => { callback?.Invoke(); } ));
-            }
-            public static void FadeOut(this AudioSource a, MonoBehaviour instance, float from, float time, Action callback = null)
-            {
-                instance.StartCoroutine(Essentials.Nuwn_Essentials.LerpFloat((f) => { a.volume = f; }, from, 0, time, (v) => { callback?.Invoke(); } ));
+                instance.StartCoroutine(Essentials.Nuwn_Essentials.LerpFloat((f) => { a.volume = f; }, from, to, time, (v) => { callback?.Invoke(); } ));
             }
         }
-
+        public static class ColorLerpExtentions
+        {
+            public static void Fade(this Image c, MonoBehaviour instance, float from, float to, float time, Action callback = null)
+            {
+                instance.StartCoroutine(Essentials.Nuwn_Essentials.LerpFloat((f) => 
+                {
+                    Color col = c.color;
+                    col.a = f;
+                    c.color = col;
+                }, from, to, time, (v) => { callback?.Invoke(); }));
+            }
+        }
         public static class ArrayExtensions
         {
             public static T[] Add<T>(this T[] array, T item)
