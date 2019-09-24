@@ -7,21 +7,77 @@ using Nuwn.Extensions;
 
 namespace Nuwn
 {
-    public abstract class GameManager : MonoBehaviour
+    public abstract class GameManager : Singleton<MonoBehaviour>
     {
         
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
+            Debug.Log("enabled");
             SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
-        protected virtual void OnSceneLoaded(Scene arg0, LoadSceneMode arg1) { }
+        public static MonoBehaviour GetInstance()
+        {
+            return Instance;
+        }
 
+        #region SceneManagement
+        List<Scene> activeScenes = new List<Scene>();
+        protected virtual void OnSceneUnloaded(Scene arg0)
+        {
+            activeScenes.Remove(arg0);
+        }
+        protected virtual void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+        {
+            activeScenes.Add(arg0);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="oldScene">-1 if you want to unload manually</param>
+        public void LoadScene(int i)
+        {
+            StartCoroutine(Nuwn_Essentials.LoadNewScene(i, -1));
+        }
+        public void LoadScene(int i, int oldScene)
+        {
+            StartCoroutine(Nuwn_Essentials.LoadNewScene(i, oldScene));
+        }
+        public void LoadScene(int i, Action Callback)
+        {
+            StartCoroutine(Nuwn_Essentials.LoadNewScene(i, -1, (v) => { if (v) Callback(); }));
+        }
+        public void AddScene(int i)
+        {
+            StartCoroutine(Nuwn_Essentials.AddNewScene(i));
+        }
+        public void AddScene(int i, int oldScene)
+        {
+            StartCoroutine(Nuwn_Essentials.AddNewScene(i, oldScene));
+        }
+        public void AddScene(int i, Action Callback)
+        {
+            StartCoroutine(Nuwn_Essentials.AddNewScene(i, -1, (v) => { if (v) Callback(); }));
+        }
+        public void UnloadScene(int scene)
+        {
+            SceneManager.UnloadSceneAsync(scene);
+        }
+        #endregion
+
+
+        #region PauseHandler
+        protected virtual void OnApplicationPause(bool pause)
+        {
+            PauseGame(pause);
+        }
         bool isPaused = false;
         float prevTime;
         private void PauseGame(bool v)
         {
-            if(!isPaused && v)
+            if (!isPaused && v)
             {
                 prevTime = Time.timeScale;
                 Time.timeScale = 0;
@@ -43,66 +99,31 @@ namespace Nuwn
         {
             PauseGame(false);
         }
-        
         public void RestartGame()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-        public void LoadScene(int i)
-        {
-            Nuwn_Essentials.LoadNewScene(i, SceneManager.GetActiveScene().buildIndex);
-        }
-
-
-
+        #endregion
 
         #region Pausable
-        static PausableMonoBehaviour[] Pausables = new PausableMonoBehaviour[0];
-        static PausableScriptableObject[] PausableScriptableObjects = new PausableScriptableObject[0];
+        static IPausable[] Pausables = new IPausable[0];
 
-        public static void RegisterPausable(object pausable)
+        public static void RegisterPausable(IPausable pausable)
         {
-            switch (pausable)
-            {
-                case PausableMonoBehaviour pm:
-                    Pausables = Pausables.Add(pm);
-                    break;
-                case PausableScriptableObject ps:
-                    PausableScriptableObjects = PausableScriptableObjects.Add(ps);
-                    break;
-            }
+            Pausables = Pausables.Add(pausable);
         }
-        public static void UnRegisterPausable(object pausable)
+        public static void UnRegisterPausable(IPausable pausable)
         {
-            switch (pausable)
-            {
-                case PausableMonoBehaviour pm:
-                    Pausables = Pausables.Remove(pm);
-                    break;
-                case PausableScriptableObject ps:
-                    PausableScriptableObjects = PausableScriptableObjects.Remove(ps);
-                    break;
-            }
+            Pausables = Pausables.Remove(pausable);
         }
 
         private void SetPause(bool v)
         {
-            for (int i = 0; i < PausableScriptableObjects.Length; i++)
-            {
-                if (PausableScriptableObjects[i].HasMethod("OnPause"))
-                {
-                    PausableScriptableObjects[i].OnPause(v);
-                }
-            }
             for (int i = 0; i < Pausables.Length; i++)
             {
-                if (Pausables[i].HasMethod("OnPause"))
-                {
-                    Pausables[i].OnPause(v);
-                }
+                Pausables[i].OnPause(v);
             }       
         }
-
         #endregion
     }
 }

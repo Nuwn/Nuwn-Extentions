@@ -1,7 +1,7 @@
 ﻿using Nuwn;
 using UnityEngine;
 
-public abstract class PausableMonoBehaviour : MonoBehaviour
+public abstract class PausableMonoBehaviour : MonoBehaviour, IPausable
 {
     protected virtual void Awake()
     {
@@ -14,10 +14,11 @@ public abstract class PausableMonoBehaviour : MonoBehaviour
     public virtual void OnPause(bool paused)
     {
         this.enabled = !paused;
+        Debug.Log("paused");
     }
 }
 
-public abstract class PausableScriptableObject : ScriptableObject
+public abstract class PausableScriptableObject : ScriptableObject, IPausable
 {
     protected virtual void Awake()
     {
