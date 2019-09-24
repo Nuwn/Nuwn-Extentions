@@ -61,9 +61,13 @@ namespace Nuwn
         {
             StartCoroutine(Nuwn_Essentials.AddNewScene(i, -1, (v) => { if (v) Callback(); }));
         }
-        public void UnloadScene(int scene)
+        public void UnloadScene(Scene scene)
         {
             SceneManager.UnloadSceneAsync(scene);
+        }
+        public void ChangeScene(Scene scene)
+        {
+            SceneManager.SetActiveScene(scene);
         }
         #endregion
 
