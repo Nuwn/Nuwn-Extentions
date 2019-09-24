@@ -23,7 +23,7 @@ namespace Nuwn
         }
 
         #region SceneManagement
-        List<Scene> activeScenes = new List<Scene>();
+        public List<Scene> activeScenes = new List<Scene>();
         protected virtual void OnSceneUnloaded(Scene arg0)
         {
             activeScenes.Remove(arg0);
@@ -45,9 +45,9 @@ namespace Nuwn
         {
             StartCoroutine(Nuwn_Essentials.LoadNewScene(i, oldScene));
         }
-        public void LoadScene(int i, Action Callback)
+        public void LoadScene(int i, Action<Scene> Callback)
         {
-            StartCoroutine(Nuwn_Essentials.LoadNewScene(i, -1, (v) => { if (v) Callback(); }));
+            StartCoroutine(Nuwn_Essentials.LoadNewScene(i, -1, (v) => { if (v) Callback(SceneManager.GetSceneByBuildIndex(i)); }));
         }
         public void AddScene(int i)
         {
@@ -57,9 +57,9 @@ namespace Nuwn
         {
             StartCoroutine(Nuwn_Essentials.AddNewScene(i, oldScene));
         }
-        public void AddScene(int i, Action Callback)
+        public void AddScene(int i, Action<Scene> Callback)
         {
-            StartCoroutine(Nuwn_Essentials.AddNewScene(i, -1, (v) => { if (v) Callback(); }));
+            StartCoroutine(Nuwn_Essentials.AddNewScene(i, -1, (v) => { if (v) Callback(SceneManager.GetSceneByBuildIndex(i)); }));
         }
         public void UnloadScene(Scene scene)
         {
