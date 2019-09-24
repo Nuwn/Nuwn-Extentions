@@ -38,7 +38,24 @@ namespace Nuwn
                     if (async.isDone && Callback != null) Callback(true);
                 } 
             }
+            public static IEnumerator AddNewScene(int newScene, int oldScene = -1, Action<bool> Callback = null)
+            {
+                AsyncOperation async = SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Additive);
 
+                while (!async.isDone)
+                {
+                    yield return null;
+                }
+
+                if (oldScene != -1)
+                {
+                    SceneManager.UnloadSceneAsync(oldScene);
+                }
+                else
+                {
+                    if (async.isDone && Callback != null) Callback(true);
+                }
+            }
 
 
             /// <summary>

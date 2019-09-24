@@ -8,19 +8,76 @@ using Nuwn.Extensions;
 namespace Nuwn
 {
     public abstract class GameManager : Singleton<MonoBehaviour>
-    {   
-        private void OnEnable()
+    {
+        
+        protected virtual void OnEnable()
         {
+            Debug.Log("enabled");
             SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
-        protected virtual void OnSceneLoaded(Scene arg0, LoadSceneMode arg1) { }
+        public static MonoBehaviour GetInstance()
+        {
+            return Instance;
+        }
 
+        #region SceneManagement
+        List<Scene> activeScenes = new List<Scene>();
+        protected virtual void OnSceneUnloaded(Scene arg0)
+        {
+            activeScenes.Remove(arg0);
+        }
+        protected virtual void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+        {
+            activeScenes.Add(arg0);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="oldScene">-1 if you want to unload manually</param>
+        public void LoadScene(int i)
+        {
+            StartCoroutine(Nuwn_Essentials.LoadNewScene(i, -1));
+        }
+        public void LoadScene(int i, int oldScene)
+        {
+            StartCoroutine(Nuwn_Essentials.LoadNewScene(i, oldScene));
+        }
+        public void LoadScene(int i, Action Callback)
+        {
+            StartCoroutine(Nuwn_Essentials.LoadNewScene(i, -1, (v) => { if (v) Callback(); }));
+        }
+        public void AddScene(int i)
+        {
+            StartCoroutine(Nuwn_Essentials.AddNewScene(i));
+        }
+        public void AddScene(int i, int oldScene)
+        {
+            StartCoroutine(Nuwn_Essentials.AddNewScene(i, oldScene));
+        }
+        public void AddScene(int i, Action Callback)
+        {
+            StartCoroutine(Nuwn_Essentials.AddNewScene(i, -1, (v) => { if (v) Callback(); }));
+        }
+        public void UnloadScene(int scene)
+        {
+            SceneManager.UnloadSceneAsync(scene);
+        }
+        #endregion
+
+
+        #region PauseHandler
+        protected virtual void OnApplicationPause(bool pause)
+        {
+            PauseGame(pause);
+        }
         bool isPaused = false;
         float prevTime;
         private void PauseGame(bool v)
         {
-            if(!isPaused && v)
+            if (!isPaused && v)
             {
                 prevTime = Time.timeScale;
                 Time.timeScale = 0;
@@ -41,37 +98,12 @@ namespace Nuwn
         public void Resume()
         {
             PauseGame(false);
-        }  
+        }
         public void RestartGame()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="oldScene">-1 if you want to unload manually</param>
-        public void LoadScene(int i)
-        {
-            Nuwn_Essentials.LoadNewScene(i, -1);
-        }
-        public void LoadScene(int i, int oldScene)
-        {
-            Nuwn_Essentials.LoadNewScene(i, oldScene);
-        }
-        public void LoadScene(int i, Action Callback)
-        {
-            Nuwn_Essentials.LoadNewScene(i, -1, (v) => { if (v) Callback(); });
-        }
-        public void UnloadScene(int scene)
-        {
-            SceneManager.UnloadSceneAsync(scene);
-        }
-        private void OnApplicationPause(bool pause)
-        {
-            PauseGame(pause);
-        }
-
+        #endregion
 
         #region Pausable
         static IPausable[] Pausables = new IPausable[0];
