@@ -7,7 +7,7 @@ using Nuwn.Extensions;
 
 namespace Nuwn
 {
-    public abstract class GameManager : Singleton<MonoBehaviour>
+    public abstract class GameManager : MonoBehaviour
     {
         
         protected virtual void OnEnable()
