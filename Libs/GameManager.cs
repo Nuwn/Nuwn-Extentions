@@ -17,11 +17,6 @@ namespace Nuwn
             SceneManager.sceneUnloaded += OnSceneUnloaded;
         }
 
-        public static MonoBehaviour GetInstance()
-        {
-            return Instance;
-        }
-
         #region SceneManagement
         public List<Scene> activeScenes = new List<Scene>();
         protected virtual void OnSceneUnloaded(Scene arg0)
