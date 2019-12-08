@@ -143,6 +143,20 @@ namespace Nuwn
                 @return(to);
                 Callback?.Invoke(true);
             }
+            public static IEnumerator LerpVector2(Action<Vector2> @return, Vector2 from, Vector2 to, float duration = 2, Action<bool> Callback = null)
+            {
+                var i = 0f;
+                var rate = 1f / duration;
+
+                while (i < 1f)
+                {
+                    i += Time.deltaTime * rate;
+                    @return(Vector2.Lerp(from, to, Mathf.SmoothStep(0.0f, 1.0f, i)));
+                    yield return null;
+                }
+                @return(to);
+                Callback?.Invoke(true);
+            }
             public static IEnumerator LerpQuaternion(Action<Quaternion> @return, Quaternion from, Quaternion to, float duration = 2, Action<bool> Callback = null)
             {
                 var i = 0f;
