@@ -269,6 +269,15 @@ namespace Nuwn
             //{
             //    return col.bounds.Contains;
             //}
+
+            public static bool CompareLayer(this Collider2D collision, LayerMask mask)
+            {
+                return (((1 << collision.gameObject.layer) & mask) != 0) ? true : false;
+            }
+            public static bool CompareLayer(this Collider collision, LayerMask mask)
+            {
+                return (((1 << collision.gameObject.layer) & mask) != 0) ? true : false;
+            }
         }
         public static class AudioExtentions
         {

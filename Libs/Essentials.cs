@@ -223,6 +223,8 @@ namespace Nuwn
                     IgnoreCollision(coll1, col, ignore);
                 }
             }
+
+
         }
         public struct RangedFloat
         {
