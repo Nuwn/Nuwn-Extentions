@@ -265,16 +265,19 @@ namespace Nuwn
                     UnityEngine.Random.Range(col.bounds.min.z, col.bounds.max.z)
                 );
             }
-            //public static Vector3 GetPositionInBounds(this Collider col, Transform obj)
-            //{
-            //    return col.bounds.Contains;
-            //}
-
             public static bool CompareLayer(this Collider2D collision, LayerMask mask)
             {
                 return (((1 << collision.gameObject.layer) & mask) != 0) ? true : false;
             }
             public static bool CompareLayer(this Collider collision, LayerMask mask)
+            {
+                return (((1 << collision.gameObject.layer) & mask) != 0) ? true : false;
+            }
+            public static bool CompareLayer(this Collision2D collision, LayerMask mask)
+            {
+                return (((1 << collision.gameObject.layer) & mask) != 0) ? true : false;
+            }
+            public static bool CompareLayer(this Collision collision, LayerMask mask)
             {
                 return (((1 << collision.gameObject.layer) & mask) != 0) ? true : false;
             }
