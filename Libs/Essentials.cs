@@ -216,6 +216,7 @@ namespace Nuwn
             /// <param name="col2">Second Collider</param>
             /// <param name="ignore">Set false to remove the ignore</param>
             public static void IgnoreCollision(Collider coll1, Collider coll2, bool ignore) => Physics.IgnoreCollision(coll1, coll2, ignore);
+            public static void IgnoreCollision(Collider2D coll1, Collider2D coll2, bool ignore) => Physics2D.IgnoreCollision(coll1, coll2, ignore);
             public static void MultiIgnoreCollision(Collider coll1, List<Collider> CollList, bool ignore)
             {
                 foreach (var col in CollList)
@@ -223,8 +224,13 @@ namespace Nuwn
                     IgnoreCollision(coll1, col, ignore);
                 }
             }
-
-
+            public static void MultiIgnoreCollision(Collider2D coll1, List<Collider2D> CollList, bool ignore)
+            {
+                foreach (var col in CollList)
+                {
+                    IgnoreCollision(coll1, col, ignore);
+                }
+            }
         }
         public struct RangedFloat
         {
