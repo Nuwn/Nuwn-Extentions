@@ -265,6 +265,13 @@ namespace Nuwn
                     UnityEngine.Random.Range(col.bounds.min.z, col.bounds.max.z)
                 );
             }
+            public static Vector2 RandomPointInBounds(this Collider2D col)
+            {
+                return new Vector2(
+                    UnityEngine.Random.Range(col.bounds.min.x, col.bounds.max.x),
+                    UnityEngine.Random.Range(col.bounds.min.y, col.bounds.max.y)
+                );
+            }
             public static bool CompareLayer(this Collider2D collision, LayerMask mask)
             {
                 return (((1 << collision.gameObject.layer) & mask) != 0) ? true : false;

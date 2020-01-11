@@ -76,7 +76,7 @@ namespace Nuwn
         {
             PauseGame(pause);
         }
-        bool isPaused = false;
+        public bool isPaused { get; private set; } = false;
         float prevTime;
         private void PauseGame(bool v)
         {
