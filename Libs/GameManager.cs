@@ -9,7 +9,7 @@ namespace Nuwn
 {
     public abstract class GameManager : MonoBehaviour
     {
-        
+
         protected virtual void OnEnable()
         {
             Debug.Log("enabled");
@@ -125,7 +125,7 @@ namespace Nuwn
             for (int i = 0; i < Pausables.Length; i++)
             {
                 Pausables[i].OnPause(v);
-            }       
+            }
         }
         #endregion
     }

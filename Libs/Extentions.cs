@@ -36,12 +36,12 @@ namespace Nuwn
         }
         public static class DebugExtentions
         {
-            public static void LogList<T>(this List<T> list) 
+            public static void LogList<T>(this List<T> list)
             {
                 foreach (var l in list)
                 {
                     Debug.Log(l);
-                }   
+                }
             }
 
             private static object GetPropValue<T>(T l, string property)
@@ -106,7 +106,7 @@ namespace Nuwn
             {
                 List<GameObject> List = new List<GameObject>();
 
-                for(int i = 0; i < transform.childCount; i++)
+                for (int i = 0; i < transform.childCount; i++)
                 {
                     if (transform.GetChild(i).name.Contains(name))
                         List.Add(transform.GetChild(i).gameObject);
@@ -194,8 +194,8 @@ namespace Nuwn
                 return Empty(type);
             }
             public static bool Empty<T>(this T type)
-            {   
-                if(type == null)
+            {
+                if (type == null)
                 {
                     return true;
                 }
@@ -291,16 +291,16 @@ namespace Nuwn
         }
         public static class AudioExtentions
         {
-            public static void Fade (this AudioSource a, MonoBehaviour instance, float from, float to, float time, Action callback = null)
+            public static void Fade(this AudioSource a, MonoBehaviour instance, float from, float to, float time, Action callback = null)
             {
-                instance.StartCoroutine(Essentials.Nuwn_Essentials.LerpFloat((f) => { a.volume = f; }, from, to, time, (v) => { callback?.Invoke(); } ));
+                instance.StartCoroutine(Essentials.Nuwn_Essentials.LerpFloat((f) => { a.volume = f; }, from, to, time, (v) => { callback?.Invoke(); }));
             }
         }
         public static class ColorLerpExtentions
         {
             public static void Fade(this Image c, MonoBehaviour instance, float from, float to, float time, Action callback = null)
             {
-                instance.StartCoroutine(Essentials.Nuwn_Essentials.LerpFloat((f) => 
+                instance.StartCoroutine(Essentials.Nuwn_Essentials.LerpFloat((f) =>
                 {
                     Color col = c.color;
                     col.a = f;

@@ -9,7 +9,7 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace Nuwn
-{ 
+{
     namespace Essentials
     {
         public class Nuwn_Essentials : MonoBehaviour
@@ -20,7 +20,7 @@ namespace Nuwn
             /// <param name="newScene"></param>
             /// <param name="oldScene"> ignore this to disable unload</param>
             /// <returns></returns>
-            public static IEnumerator LoadNewScene(int newScene,  int oldScene = -1, Action<bool> Callback = null)
+            public static IEnumerator LoadNewScene(int newScene, int oldScene = -1, Action<bool> Callback = null)
             {
                 AsyncOperation async = SceneManager.LoadSceneAsync(newScene);
 
@@ -36,7 +36,7 @@ namespace Nuwn
                 else
                 {
                     if (async.isDone && Callback != null) Callback(true);
-                } 
+                }
             }
             public static IEnumerator AddNewScene(int newScene, int oldScene = -1, Action<bool> Callback = null)
             {
@@ -109,13 +109,27 @@ namespace Nuwn
                 var currentIndex = Array.IndexOf(array, current);
 
                 if (currentIndex == -1) throw new ArgumentNullException("Object does not exist in array");
-                
+
                 if (forward)
                     return (currentIndex == length - 1) ? 0 : currentIndex + 1;
                 else
-                    return (currentIndex == 0) ? length - 1 : currentIndex - 1;              
+                    return (currentIndex == 0) ? length - 1 : currentIndex - 1;
             }
             public static IEnumerator LerpFloat(Action<float> @return, float from, float to, float duration = 2, Action<bool> Callback = null)
+            {
+                var i = 0f;
+                var rate = 1f / duration;
+
+                while (i < 1f)
+                {
+                    i += Time.deltaTime * rate;
+                    @return(Mathf.Lerp(from, to, i));
+                    yield return null;
+                }
+                @return(to);
+                Callback?.Invoke(true);
+            }
+            public static IEnumerator LerpFloatEaseInOut(Action<float> @return, float from, float to, float duration = 2, Action<bool> Callback = null)
             {
                 var i = 0f;
                 var rate = 1f / duration;
@@ -238,9 +252,9 @@ namespace Nuwn
             public float maxValue;
         }
         public static class Nuwn_Statics
-        {}
+        { }
         [Serializable] public class UnityEventGameObject : UnityEvent<GameObject> { }
         [Serializable] public class UnityEventCollider2D : UnityEvent<Collider2D> { }
         [Serializable] public class UnityEventCollider : UnityEvent<Collider> { }
-    }   
+    }
 }
