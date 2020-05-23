@@ -12,7 +12,7 @@ public class DepthNormalsFeature : ScriptableRendererFeature
 
         private Material depthNormalsMaterial = null;
         private FilteringSettings m_FilteringSettings;
-        string m_ProfilerTag = "DepthNormals Prepass";
+        ProfilingSampler m_ProfilerTag = new ProfilingSampler("DepthNormals Prepass");
         ShaderTagId m_ShaderTagId = new ShaderTagId("DepthOnly");
 
         public DepthNormalsPass(RenderQueueRange renderQueueRange, LayerMask layerMask, Material material)
@@ -47,9 +47,9 @@ public class DepthNormalsFeature : ScriptableRendererFeature
         // You don't have to call ScriptableRenderContext.submit, the render pipeline will call it at specific points in the pipeline.
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            CommandBuffer cmd = CommandBufferPool.Get(m_ProfilerTag);
+            CommandBuffer cmd = CommandBufferPool.Get(m_ProfilerTag.name);
 
-            using (new ProfilingSample(cmd, m_ProfilerTag))
+            using (new ProfilingScope(cmd, m_ProfilerTag) )
             {
                 context.ExecuteCommandBuffer(cmd);
                 cmd.Clear();

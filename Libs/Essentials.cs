@@ -1,9 +1,11 @@
+using ICSharpCode.NRefactory.Ast;
 using Nuwn.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -37,7 +39,8 @@ namespace Nuwn
                 {
                     if (async.isDone && Callback != null) Callback(true);
                 }
-            }
+            }  
+            
             public static IEnumerator AddNewScene(int newScene, int oldScene = -1, Action<bool> Callback = null)
             {
                 AsyncOperation async = SceneManager.LoadSceneAsync(newScene, LoadSceneMode.Additive);
@@ -199,6 +202,22 @@ namespace Nuwn
                 return inclusive
                     ? lower <= num && num <= upper
                     : lower < num && num < upper;
+            }
+
+            public static Vector3 Remap(float iMin, float iMax, Vector3 a, Vector3 b, float value, bool clamp = false)
+            {
+                float t = Mathf.InverseLerp(iMin, iMax, value);
+                return (1.0f - t) * a + b * t;
+            }
+            public static float Remap(float iMin, float iMax, float a, float b, float value)
+            {
+                float t = Mathf.InverseLerp(iMin, iMax, value);
+                return (1.0f - t) * a + b * t;
+            }
+            public static Vector2 Remap(float iMin, float iMax, Vector2 a, Vector2 b, float value)
+            {
+                float t = Mathf.InverseLerp(iMin, iMax, value);
+                return (1.0f - t) * a + b * t;
             }
         }
         public class Nuwn_Instanciating : MonoBehaviour
