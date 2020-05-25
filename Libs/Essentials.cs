@@ -204,21 +204,21 @@ namespace Nuwn
                     : lower < num && num < upper;
             }
 
-            public static Vector3 Remap(float iMin, float iMax, Vector3 a, Vector3 b, float value, bool clamp = false)
+            /// <summary>
+            /// Checks if the number is between 2 values;
+            /// </summary>
+            /// <param name="InMin">0</param>
+            /// <param name="InMax">1</param>
+            /// <param name="OutMin">-36</param>
+            /// <param name="OutMax">65</param>
+            /// <param name="value">ex. CurrentSpeed</param>
+            /// <returns></returns>
+            public static float Remap(float InMin, float InMax, float OutMin, float OutMax, float value)
             {
-                float t = Mathf.InverseLerp(iMin, iMax, value);
-                return (1.0f - t) * a + b * t;
+                float t = (value - InMin) / (InMax - InMin);
+                return (1.0f - t) * OutMin + OutMax * t;
             }
-            public static float Remap(float iMin, float iMax, float a, float b, float value)
-            {
-                float t = Mathf.InverseLerp(iMin, iMax, value);
-                return (1.0f - t) * a + b * t;
-            }
-            public static Vector2 Remap(float iMin, float iMax, Vector2 a, Vector2 b, float value)
-            {
-                float t = Mathf.InverseLerp(iMin, iMax, value);
-                return (1.0f - t) * a + b * t;
-            }
+
         }
         public class Nuwn_Instanciating : MonoBehaviour
         {
